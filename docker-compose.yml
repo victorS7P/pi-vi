@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  database:
+    image: mongo
+    container_name: pi-iv-database
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+
+  scrappers:
+    container_name: pi-iv-scrappers
+    build:
+      context: scrappers
+    ports:
+      - 3001:3001
+
+  # back-end:
+  #   container_name: pi-iv-back-end
+  #   build:
+  #     context: back-end
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - db
+
+  front-end:
+    container_name: pi-iv-front-end
+    build:
+      context: front-end
+    ports:
+      - 8080:8080
