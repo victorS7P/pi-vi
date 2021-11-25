@@ -1,3 +1,5 @@
-python-dotenv
+python-dotenv==0.19.2
 pymongo==3.12
 scrapy==2.5.1
+scrapy-splash==0.8.0
+scrapy-fake-useragent==1.4.4

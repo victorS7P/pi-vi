@@ -1,15 +1,5 @@
-from scrapy.crawler import CrawlerProcess
-
-
-from protocols.Product import Product
-from protocols.MongoDB import MongoDB
-
-from scrappers.KabumScrapper import KabumThread
+from scrapper_thread import ScrapperThread
+from scrappers.KabumScrapper import KabumScrapper
 
 if __name__ == '__main__':
-  db = MongoDB()
-  # kabumScrapper = KabumScrapper(
-  #   db=db
-  # )
-
-  KabumThread().run(db)
+  ScrapperThread(KabumScrapper).run()

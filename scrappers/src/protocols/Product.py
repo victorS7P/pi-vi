@@ -12,7 +12,7 @@ class Product():
     cratedAt = datetime.now()
 
     return {
-      "_id": self.id,
+      "sku": self.id,
       "createdAt": {
         "year": cratedAt.strftime("%Y"),
         "month": cratedAt.strftime("%m"),

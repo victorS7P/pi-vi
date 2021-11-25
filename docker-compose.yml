@@ -10,6 +10,12 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
 
+  splash:
+    image: scrapinghub/splash
+    container_name: scraping_splash
+    ports:
+      - 8050:8050
+
   scrappers:
     container_name: pi-iv-scrappers
     build:
@@ -18,6 +24,7 @@ services:
       DB_URL: mongodb://admin:admin@database:27017/
       DB_NAME: 'pi-iv'
     depends_on:
+      - splash
       - database
 
   # back-end:
