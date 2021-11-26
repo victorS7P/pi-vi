@@ -23,5 +23,6 @@ class Product():
       "price": self.price,
       "category": self.category,
       "brand": self.brand,
+      "marketplace": self.marketplace
     }
   

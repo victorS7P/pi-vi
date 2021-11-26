@@ -20,9 +20,7 @@ services:
     container_name: pi-iv-scrappers
     build:
       context: scrappers
-    environment:
-      DB_URL: mongodb://admin:admin@database:27017/
-      DB_NAME: 'pi-iv'
+      dockerfile: Dockerfile.scrappers
     depends_on:
       - splash
       - database
@@ -33,6 +31,7 @@ services:
     - 5001:5001
     build:
       context: api
+      dockerfile: Dockerfile.api
     environment:
       DB_URL: mongodb://admin:admin@database:27017/
       DB_NAME: 'pi-iv'
@@ -43,5 +42,6 @@ services:
     container_name: pi-iv-web
     build:
       context: web
+      dockerfile: Dockerfile.web
     ports:
       - 8080:8080

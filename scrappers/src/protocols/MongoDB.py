@@ -10,7 +10,6 @@ class MongoDB():
     load_dotenv()
     mongo_url = os.environ['DB_URL']
 
-    print(mongo_url)
     self.client = MongoClient(mongo_url)
     self.db = self.client[os.environ['DB_NAME']]
     

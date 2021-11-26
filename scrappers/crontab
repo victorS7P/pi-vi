@@ -1,3 +1,8 @@
+#!/bin/bash -l
+
+DB_URL=mongodb://admin:admin@database:27017/
+DB_NAME=pi-iv
+
 # run scrappers every day at 03:00
 0 3 * * * /usr/local/bin/python -u /app/src/main.py > /proc/1/fd/1 2>/proc/1/fd/2
 
