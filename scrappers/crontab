@@ -1,2 +1,5 @@
-#run scrappers every minute
-* 3 * * * /usr/local/bin/python -u /app/src/main.py > /proc/1/fd/1 2>/proc/1/fd/2
+# run scrappers every day at 03:00
+0 3 * * * /usr/local/bin/python -u /app/src/main.py > /proc/1/fd/1 2>/proc/1/fd/2
+
+# run scrappers every minute
+# * * * * * /usr/local/bin/python -u /app/src/main.py > /proc/1/fd/1 2>/proc/1/fd/2

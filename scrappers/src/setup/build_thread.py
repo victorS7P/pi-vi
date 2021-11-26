@@ -4,7 +4,7 @@ from threading import Thread
 from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 
-class ScrapperThread(Thread):
+class BuildThread(Thread):
   def __init__(self, Scrapper):
     Thread.__init__(self)
     self.Scrapper = Scrapper
@@ -12,7 +12,7 @@ class ScrapperThread(Thread):
   def run (self):
     settings = Settings()
 
-    settings_module_path = os.environ.get('SCRAPY_ENV', 'settings')   
+    settings_module_path = os.environ.get('SCRAPY_ENV', 'setup.settings')   
     settings.setmodule(settings_module_path, priority='project')
 
     process = CrawlerProcess(settings=settings)

@@ -1,5 +1,8 @@
-from scrapper_thread import ScrapperThread
-from scrappers.KabumScrapper import KabumScrapper
+from setup.build_thread import BuildThread
+
+from scrappers.KabumScrapper import Scrapper as Kabum
 
 if __name__ == '__main__':
-  ScrapperThread(KabumScrapper).run()
+  print('Running ...')
+  BuildThread(Kabum).run()
+

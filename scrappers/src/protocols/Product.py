@@ -1,18 +1,19 @@
 from datetime import datetime
 
 class Product():
-  def __init__ (self, id, name, price, category, brand):
+  def __init__ (self, id, name, price, category, brand, marketplace):
     self.id = id
     self.name = name
     self.price = price
     self.category = category
     self.brand = brand
+    self.marketplace = marketplace
 
   def mongo_build (self):
     cratedAt = datetime.now()
 
     return {
-      "sku": self.id,
+      "sku": f"{self.marketplace}_{self.id}",
       "createdAt": {
         "year": cratedAt.strftime("%Y"),
         "month": cratedAt.strftime("%m"),
