@@ -27,6 +27,18 @@ services:
       - splash
       - database
 
+  api:
+    container_name: pi-iv-api
+    ports:
+    - "5001:5001"
+    build:
+      context: api
+    environment:
+      DB_URL: mongodb://admin:admin@database:27017/
+      DB_NAME: 'pi-iv'
+    depends_on:
+      - database
+
   # back-end:
   #   container_name: pi-iv-back-end
   #   build:
