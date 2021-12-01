@@ -7,15 +7,15 @@ app = Flask(__name__)
 
 
 class MongoAPI:
-    def __init__(self, data):
+    def __init__(self):
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s:\n%(message)s\n')
         self.client = MongoClient("mongodb://admin:admin@database:27017/")
 
-        database = data['database']
-        collection = data['collection']
+        database ='pi-iv'
+        collection = 'products'
+
         cursor = self.client[database]
         self.collection = cursor[collection]
-        self.data = data
 
     def read(self):
         log.info('Reading All Data')
@@ -79,36 +79,24 @@ def base():
                     mimetype='application/json')
 
 @app.route('/mongodb', methods=['GET'])
-def mongo_read():
-    data = request.json
-    if data is None or data == {}:
-        return error()
-    
-    obj1 = MongoAPI(data)
+def mongo_read():    
+    obj1 = MongoAPI()
     response = obj1.read()
     return Response(response=json.dumps(response),
                     status=200,
                     mimetype='application/json')
     
 @app.route('/categories', methods=['GET'])
-def categories():
-    data = request.json
-    if data is None or data == {}:
-        return error()
-    
-    obj1 = MongoAPI(data)
+def categories():    
+    obj1 = MongoAPI()
     response = obj1.read_categories()
     return Response(response=json.dumps(response),
                     status=200,
                     mimetype='application/json')
 
 @app.route('/info', methods=['GET'])
-def info():
-    data = request.json
-    if data is None or data == {}:
-        return error()
-    
-    obj1 = MongoAPI(data)
+def info():    
+    obj1 = MongoAPI()
     response = obj1.read_info()
     return Response(response=json.dumps(response),
                     status=200,
