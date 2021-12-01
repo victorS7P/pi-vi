@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0rem !important;
+}
+
+.ant-spin {
+  color: #5A479A !important;
+  font-weight: 500;
+
+  i {
+    background-color: #5A479A !important;
+  }
+}

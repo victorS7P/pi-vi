@@ -1,0 +1,73 @@
+.product-wide-card {
+  width: 100%;
+  padding: 1.25rem 2rem;
+  background-image: linear-gradient(-45deg, #5A479A, #49DCB1);
+  border-radius: 0.5rem;
+  box-shadow: 3px 3px 7px #43325833;
+  border-left: 10px solid #FFFFFF;
+  color: #FFFFFF;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  transition: all .2s ease;
+  &:hover {
+    opacity: .8;
+  }
+
+  .data {
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      color: #211A3877;
+      font-size: 1rem;
+      line-height: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+  
+    .name {
+      font-size: 1.5rem;
+      line-height: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+  
+    .marketplace {
+      color: #FFFFFFDD;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1rem;
+    }
+  }
+
+  .prices {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    text-align: center;
+
+    .last-price {
+      color: #211A38;
+      font-size: 1.5rem;
+      line-height: 1rem;
+      font-weight: 800;
+      text-decoration: line-through;
+    }
+
+    .actual-price {
+      font-size: 3rem;
+      line-height: 3rem;
+      font-weight: 600;
+    }
+
+    .last-date {
+      color: #211A38CC;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      font-weight: 600;
+    }
+  }
+}

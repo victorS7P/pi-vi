@@ -1,0 +1,24 @@
+.ant-select-selector,
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-open .ant-select-selector {
+  &, & .ant-select-selector {
+    border-radius: 1rem !important;
+    border-color: #FFFFFF !important;
+    box-shadow: 0px 3px 6px #54428e33 !important;
+  }
+}
+
+.ant-select-dropdown {
+  border-radius: 1rem;
+  padding: 0rem;
+
+  .ant-select-item-option {
+    padding: 0.5rem 0.785rem;
+  }
+
+  .ant-select-item-option-selected {
+    background-color: #8963BA33;
+  }
+}

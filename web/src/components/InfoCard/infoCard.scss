@@ -1,0 +1,46 @@
+.info-card {
+  width: fit-content;
+  padding: 1.25rem 2.25rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 3px 3px 10px #43325822;
+  border-left: 10px solid #49BEAA;
+
+  display: flex;
+
+  .icon {
+    font-size: 4rem;
+    margin-right: 2rem;
+  }
+
+  .content {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & > * {
+      white-space: nowrap;
+    }
+
+    .title {
+      font-size: 1.375rem;
+      line-height: 1.5rem;
+      font-weight: 600;
+      color: #211A3877;
+    }
+
+    .value {
+      font-size: 3.5rem;
+      line-height: 3.5rem;
+      font-weight: 700;
+      color: #49BEAA;
+    }
+
+    .label {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #211A3877;
+    }
+  }
+}

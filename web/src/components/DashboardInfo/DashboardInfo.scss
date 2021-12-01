@@ -1,0 +1,13 @@
+.scroll-container {
+  width: 100%;
+  cursor: default;
+  padding: 0.5rem 0rem 1rem;
+
+  #infinite-row {
+    display: flex;
+  
+    & > div {
+      margin-right: 1.25rem;
+    }
+  }
+}
