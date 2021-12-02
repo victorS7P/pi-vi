@@ -1,10 +1,11 @@
 from flask import Flask, request, json, Response
+from flask_cors import CORS
 from pymongo import MongoClient
 import logging as log
 from datetime import date
 
 app = Flask(__name__)
-
+CORS(app)
 
 class MongoAPI:
     def __init__(self):
