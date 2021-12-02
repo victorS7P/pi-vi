@@ -1,26 +1,3 @@
-interface Product {
-  name: string,
-  sku: string,
-  marketplace: string,
-  category: string,  
-  prices: PriceHistory[]
-}
-
-interface PriceHistory {
-  price: float,
-  date: {
-    year: int,
-    month: int
-    day: int
-  }
-}
-
-Retornar os dados de um único produto
-GET /products/:sku
-reponse: {
-  product: Product
-}
-
 Retornar os 10 produtos que tiveram a maior queda de preço de ontem para hoje:
 GET /products/sale
 reponse: {
@@ -30,12 +7,6 @@ reponse: {
 Retornar os 10 produtos de uma categoria y que tiveram a maior queda de preço de ontem para hoje:
 GET /products/sale?category=y
 reponse: {
-  list: Product[]
-}
-
-Retornar os 10 produtos com o nome mais próximo de string x:
-GET /products/match?name=x
-response: {
   list: Product[]
 }
 

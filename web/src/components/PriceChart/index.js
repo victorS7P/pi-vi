@@ -1,36 +1,55 @@
 import './PriceChart.scss'
 
 import React from 'react'
-import { LineChart, XAxis, YAxis, Legend, Line } from 'recharts'
+import { LineChart, XAxis, YAxis, Legend, Line, ResponsiveContainer, Tooltip } from 'recharts'
 
-export function PriceChartComponent ({ width, height, priceHistory }) {
-  const data = [
-    {
-      price: 200,
-      date: '20/11/2021'
-    },
-    {
-      price: 210,
-      date: '21/11/2021'
-    },
-    {
-      price: 220,
-      date: '22/11/2021'
-    }
-  ]
+import { formatCurrency, formatTimestamp } from 'utils'
 
+export function PriceChartComponent ({ series }) {
   return (
     <div className="container">
-      <LineChart
-        width={width}
-        height={height}
-        data={data}
-      >
-        <XAxis dataKey="date"/>
-        <YAxis/>
-        <Legend />
-        <Line type="monotone" dataKey="price" stroke="#8884d8" />
-      </LineChart>
+      <ResponsiveContainer>
+        <LineChart
+          margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
+        >
+          <XAxis
+            allowDuplicatedCategory={false}
+            dataKey='date'
+            type='number'
+            tick={{ fontSize: 12 }}
+            tickFormatter={formatTimestamp}
+            domain={['auto', 'dataMax']}
+            angle={-30}
+            tickMargin={20}
+          />
+
+          <YAxis
+            padding={{ top: 20, bottom: 0 }}
+            tick={{ fontSize: 12 }}
+            tickMargin={5}
+            tickFormatter={formatCurrency}
+          />
+
+          <Tooltip
+            formatter={formatCurrency}
+            labelFormatter={formatTimestamp}
+          />
+
+          <Legend verticalAlign='top' />
+
+          {series.map(s => (
+            <Line
+              name={s.name}
+              key={s.name}
+              type="linear"
+              dataKey="price"
+              data={s.data}
+              stroke={s.color}
+              strokeWidth={2}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   )
 }

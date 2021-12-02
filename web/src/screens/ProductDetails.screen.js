@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Creators, Selectors } from 'ducks/dashboard.duck'
 import { Spin } from 'antd'
+import { ProductDetailsComponent } from 'components/ProductDetails'
 
 export function ProductDetailsScreen () {
   const dispatch = useDispatch()
@@ -11,6 +12,8 @@ export function ProductDetailsScreen () {
 
   const selectedProduct = useSelector(Selectors.selectedProduct)
   const selectedProductLoading = useSelector(Selectors.selectedProductLoading)
+  const selectedProductCategory = useSelector(Selectors.selectedProductCategory)
+  const selectedProductMatches = useSelector(Selectors.selectedProductMatches)
 
   useEffect(function () {
     dispatch(Creators.productDataRequest(sku))
@@ -18,9 +21,11 @@ export function ProductDetailsScreen () {
 
   return (
     <Spin spinning={selectedProductLoading}>
-      <div>
-        #{selectedProduct.sku}
-      </div>
+      <ProductDetailsComponent
+        product={selectedProduct}
+        category={selectedProductCategory}
+        matches={selectedProductMatches}
+      />
     </Spin>
   )
 }

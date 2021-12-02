@@ -1,5 +1,7 @@
-import { ProductModel } from 'Models/Products.model'
 import { createActions, createReducer } from 'reduxsauce'
+
+import { ProductModel } from 'Models/Products.model'
+import { CategoryModel } from 'Models/Category.model'
 
 /* Types */
 export const { Types, Creators } = createActions({
@@ -16,7 +18,7 @@ export const { Types, Creators } = createActions({
   listProductsByCategorySuccess: ['list', 'page', 'totalPages', 'category'],
 
   productDataRequest: ['sku'],
-  productDataSuccess: ['product']
+  productDataSuccess: ['product', 'category', 'matches']
 }, {
   prefix: 'DASHBOARD_'
 })
@@ -51,7 +53,9 @@ export const INITIAL_STATE = {
 
   selectedProduct: {
     loading: false,
-    product: new ProductModel()
+    product: new ProductModel(),
+    category: new CategoryModel(),
+    matches: []
   }
 }
 
@@ -69,7 +73,9 @@ export const Selectors = {
   productsTotalPages: state => state.dashboard.products.totalPages,
   
   selectedProduct: state => state.dashboard.selectedProduct.product,
-  selectedProductLoading: state => state.dashboard.selectedProduct.loading
+  selectedProductLoading: state => state.dashboard.selectedProduct.loading,
+  selectedProductCategory: state => state.dashboard.selectedProduct.category,
+  selectedProductMatches: state => state.dashboard.selectedProduct.matches,
 }
 
 /* Action Creators */
@@ -157,11 +163,13 @@ export const Actions = {
     }
   }),
 
-  productDataSuccess: (state, { product }) => ({
+  productDataSuccess: (state, { product, category, matches }) => ({
     ...state,
     selectedProduct: {
       ...state.selectedProduct,
       product,
+      category,
+      matches,
       loading: false,
     }
   })

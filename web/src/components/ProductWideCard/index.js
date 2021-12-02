@@ -17,7 +17,7 @@ export function ProductWideCard ({ product }) {
     >
       <span className='data'>
         <span className='title'>
-          Último Produto Cadastrado
+          Último Produto Minerado
         </span>
 
         <span className="name">

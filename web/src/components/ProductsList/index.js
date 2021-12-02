@@ -21,6 +21,8 @@ export function ProductsListComponent ({ list, loading, currentPage, lastPage, o
 
         dataSource={list}
         pagination={false}
+        rowKey='sku'
+
         columns={[
           {
             title: 'Nome',
