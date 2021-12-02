@@ -43,9 +43,9 @@ function App() {
 
           <div id="links">
             <CustomLink to='/home' Icon={HomeOutlined} label='Dashboard' />
-            <CustomLink to='/produtos' Icon={DatabaseOutlined} label='Produtos' />
             <CustomLink to='/quedas' Icon={FallOutlined} label='Maiores Quedas do Dia' />
             <CustomLink to='/categorias' Icon={TagsOutlined} label='Categorias' />
+            <CustomLink to='/produtos' Icon={DatabaseOutlined} label='Produtos' />
           </div>
         </div>
 

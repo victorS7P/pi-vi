@@ -42,7 +42,7 @@ export const db = {
   },
 
   product: {
-    find: sku => products.find(p => p.sku === sku) || db.products[0],
+    find: sku => products.find(p => p.sku === sku) || db.products[10],
     categoryPrices: products[10].prices,
     matches: random.arrayElements(products, 5)
   }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
-import { isEmpty } from 'lodash'
 
 import { Creators, Selectors } from 'ducks/dashboard.duck'
 import { BiggestFallsComponent } from "components/BiggestFalls"
@@ -14,7 +13,7 @@ export function BiggestFallsScreen () {
 
   useEffect(function () {
     dispatch(Creators.dashboardBiggestFallListRequest(currentCategory))
-  }, [currentCategory])
+  }, [dispatch, currentCategory])
 
   return (
     <Spin spinning={infoData.biggestFallLoading}>

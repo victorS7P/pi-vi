@@ -5,8 +5,6 @@ import { ProductsListComponent } from 'components/ProductsList'
 import { PriceChartComponent } from 'components/PriceChart'
 
 export function BiggestFallsComponent ({ onChangeCategory, list }) {
-  console.log({ list })
-
   const series = list.map((p, i) => ({
     name: p.name,
     data: p.chartData,

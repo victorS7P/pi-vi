@@ -14,10 +14,7 @@ const getUrl = (uri) => `${API_URL}/${uri}`
 
 export function* dashboardInfoRequest () {
   const url = getUrl('info')
-
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const data = db.info
+  const { data } = yield call(axios.get, url)
 
   yield put(
     Creators.dashboardInfoSuccess(data)
@@ -44,7 +41,6 @@ export function* listCategories () {
   yield delay(1000)
   const list = map(db.categories, c => CategoryModel.fromApi({ name: c.category, count: c.products }))
 
-  console.log('puting')
   yield put(
     Creators.listCategoriesSuccess(list)
   )

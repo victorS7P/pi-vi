@@ -20,7 +20,7 @@ export function ProductsListScreen () {
     if (isEmpty(productsList) && !productsLoading) {
       dispatch(Creators.listProductsRequest(currentPage))
     }
-  }, [])
+  }, [dispatch, productsList, productsLoading, currentPage])
 
   function handleChangePage (page) {
     if (page !== currentPage) {

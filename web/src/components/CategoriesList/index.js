@@ -19,7 +19,7 @@ export function CategoriesListComponent ({ onChange }) {
     if (isEmpty(categoriesList)) {
       dispatch(Creators.listCategoriesRequest())
     }
-  }, [])
+  }, [dispatch, categoriesList])
 
   return (
     <Select

@@ -20,7 +20,7 @@ export function ProductDetailsComponent ({ product, category, matches }) {
   ]
 
   const matchesSeries = [{
-    name: product.name,
+    name: `${product.name}`,
     data: product.chartData,
     color: '#49BEAA'
   }].concat(matches.map((p, i) => ({

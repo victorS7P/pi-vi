@@ -16,12 +16,15 @@ export function CategoriesScreen () {
     if (!categoriesPricesLoaded) {
       dispatch(Creators.listCategoriesPriceHistoryRequest())
     }
-  }, [])
+  }, [dispatch, categoriesPricesLoaded])
 
   return (
     <Spin spinning={categoriesLoading || !categoriesPricesLoaded}>
       {categoriesList.map(c => (
-        <CategoryBoxComponent category={c} />
+        <CategoryBoxComponent
+          category={c}
+          key={c.name}
+        />
       ))}
     </Spin>
   )

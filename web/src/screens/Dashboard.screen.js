@@ -11,7 +11,7 @@ export function DashboardScreen () {
 
   useEffect(function () {
     dispatch(Creators.dashboardInfoRequest())
-  }, [])
+  }, [dispatch])
 
   return (
     <Spin spinning={infoData.loading}>
