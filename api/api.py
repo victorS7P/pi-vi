@@ -3,6 +3,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 import logging as log
 from datetime import date
+from datetime import timedelta
 
 app = Flask(__name__)
 CORS(app)
@@ -10,10 +11,10 @@ CORS(app)
 class MongoAPI:
     def __init__(self):
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s:\n%(message)s\n')
-        self.client = MongoClient("mongodb://admin:admin@database:27017/")
+        self.client = MongoClient("mongodb+srv://Danilo:1234@Pokemon.m0ph5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
-        database ='pi-iv'
-        collection = 'products'
+        database ='Pokemon'
+        collection = 'pokemons'
 
         cursor = self.client[database]
         self.collection = cursor[collection]
@@ -294,9 +295,36 @@ class MongoAPI:
 
         return products_list
         
+    def read_product_sale(self):
+        lyear,lmonth, lday = str(date.today()-timedelta(1)).split("-")
+        year, month, day = str(date.today()).split("-")
         
+        group = {"_id": {"nome":"$name","sku":"$sku","category":"$category", "preco":"$price"
+        ,"day":"$createdAt.day"
+        ,"month":"$createdAt.month"
+        ,"year":"$createdAt.year"}} 
+
+        group1= {"_id": {"name":"$_id.nome","sku":"$_id.sku","category":"$_id.category"},
+                 "PriceHistory":{"$push":{"price":"$_id.preco","date":{"year":"$_id.year","month":"$_id.month","day":"$_id.day"}}}}
         
+        group2 = {"_id": {"name":"$_id.nome","sku":"$_id.sku","category":"$_id.category", "PriceHistory":"$PriceHistory", "prices":"$PriceHistory.price"}}
         
+        project = {  
+            "_id":0,
+            "nome":"$_id.name",
+            "sku": "$_id.sku",
+            "category": "$_id.category",
+            "PriceHistory":"$_id.PriceHistory",
+            "sale":{"$subtract":[{"$arrayElemAt":["$_id.prices", -2]},{"$arrayElemAt":["$_id.prices", -1]}]}
+        }
+        
+        match={"$and":[{"PriceHistory.date.day":day}, {"PriceHistory.date.month":month}, {"PriceHistory.date.year":year}]}
+        
+        pipeline = [{"$group": group},{"$group": group1},{"$match":match},{"$group": group2}, {"$project": project},{"$sort":{"sale":-1} },{"$limit":10}]
+        output = []
+        for item in self.collection.aggregate(pipeline):
+            output.append(item)
+        return output
         
     
 def error():
@@ -348,6 +376,14 @@ def products_category_page():
 def product():    
     obj1 = MongoAPI()
     response = obj1.read_product()
+    return Response(response=json.dumps(response),
+                    status=200,
+                    mimetype='application/json')
+    
+@app.route('/products/sale', methods=['GET'])
+def product_sale():    
+    obj1 = MongoAPI()
+    response = obj1.read_product_sale()
     return Response(response=json.dumps(response),
                     status=200,
                     mimetype='application/json')
