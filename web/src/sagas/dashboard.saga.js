@@ -17,7 +17,7 @@ export function* dashboardInfoRequest () {
   const { data } = yield call(axios.get, url)
 
   yield put(
-    Creators.dashboardInfoSuccess(data)
+    Creators.dashboardInfoSuccess(data, ProductModel.fromApi(data.lastDocument))
   )
 }
 
@@ -37,9 +37,8 @@ export function * dashboardBiggestFallListRequest ({ category }) {
 export function* listCategories () {
   const url = getUrl('categories')
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const list = map(db.categories, c => CategoryModel.fromApi({ name: c.category, count: c.products }))
+  const { data } = yield call(axios.get, url)
+  const list = map(data, c => CategoryModel.fromApi({ name: c.category, count: c.products }))
 
   yield put(
     Creators.listCategoriesSuccess(list)
@@ -74,35 +73,32 @@ export function* listCategoriesPriceHistoryRequest () {
 }
 
 export function* listProductsRequest ({ page }) {
-  const url = `${getUrl('products')}?page=${page}`
+  const url = `${getUrl('products_page')}?page=${page}`
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const data = { list: db.list.findByPage(page), pagesCount: db.list.pagesCount }
+  const { data } = yield call(axios.get, url)
+  const products = map(data.products, ProductModel.fromApi)
 
   yield put(
-    Creators.listProductsSuccess(data.list, page, data.pagesCount)
+    Creators.listProductsSuccess(products, page, data.lastPage)
   )
 }
 
 export function* listProductsByCategoryRequest ({ page, category }) {
-  const url = `${getUrl('products')}?page=${page}&category=${category}`
+  const url = `${getUrl('products_category_page')}?page=${page}&category=${category}`
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const data = { list: [], pagesCount: 3 }
+  const { data } = yield call(axios.get, url)
+  const products = map(data.products, ProductModel.fromApi)
 
   yield put(
-    Creators.listProductsByCategorySuccess(data.list, page, data.pagesCount, category)
+    Creators.listProductsByCategorySuccess(products, page, data.lastPage, category)
   )
 }
 
 export function* productDataRequest ({ sku }) {
-  const url = `${getUrl('products')}/${sku}`
+  const url = `${getUrl('product')}?sku=${sku}`
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const product = db.product.find(sku)
+  const { data } = yield call(axios.get, url)
+  const product = ProductModel.fromApi(data)
 
   const categoryDataUrl = `${getUrl('categories')}/${product.category}`
   

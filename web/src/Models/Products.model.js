@@ -15,7 +15,12 @@ export class ProductModel {
   }
 
   static fromApi (data = {}) {
-    return new ProductModel(data)
+    return new ProductModel({
+      ...data,
+      name: data.nome,
+      prices: data.PriceHistory,
+      marketplace: data.sku.substring(0, 5)
+    })
   }
 
   static fake () {
@@ -32,9 +37,12 @@ export class ProductModel {
     return Array(amount).fill(0).map(() => ProductModel.fake())
   }
 
-  get priceChartData () {
-    return []
-    // return this.prices.map()
+  get externalLink () {
+    if (this.sku) {
+      return `https://www.kabum.com.br/produto/${this.sku.substr(6)}`
+    }
+
+    return ''
   }
 
   get lastPriceData () {

@@ -35,9 +35,9 @@ export function ProductDetailsComponent ({ product, category, matches }) {
         className='info'
         title='Produto'
       >
-        <span className="sku">
+        <a href={product.externalLink} target='_blank' className="sku">
           {product.marketplace} / {product.sku}
-        </span>
+        </a>
 
         <span className="category">
           {product.category}

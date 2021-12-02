@@ -33,6 +33,11 @@
       line-height: 1.5rem;
       font-weight: 700;
       margin-bottom: 0.35rem;
+
+      max-width: 50rem;
+      overflow:hidden; 
+      white-space:nowrap; 
+      text-overflow: ellipsis;
     }
   
     .marketplace {
@@ -55,6 +60,7 @@
       line-height: 1rem;
       font-weight: 800;
       text-decoration: line-through;
+      margin-bottom: 0.25rem;
     }
 
     .actual-price {
