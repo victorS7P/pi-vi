@@ -24,6 +24,19 @@ export function* dashboardInfoRequest () {
   )
 }
 
+export function * dashboardBiggestFallListRequest ({ category }) {
+  let url = getUrl('products/sale')
+  if (category) { url += `?category=${category}` }
+
+  // const data = yield call(axios.get, url)
+  yield delay(1000)
+  const data = { list: db.biggestFallList }
+
+  yield put(
+    Creators.dashboardBiggestFallListSuccess(data.list)
+  )
+}
+
 export function* listCategories () {
   const url = getUrl('categories')
 
@@ -86,6 +99,7 @@ export function* productDataRequest ({ sku }) {
 export default function* () {
   yield all([
     takeLatest(Types.DASHBOARD_INFO_REQUEST, dashboardInfoRequest),
+    takeLatest(Types.DASHBOARD_BIGGEST_FALL_LIST_REQUEST, dashboardBiggestFallListRequest),
     takeLatest(Types.LIST_CATEGORIES_REQUEST, listCategories),
     takeLatest(Types.LIST_PRODUCTS_REQUEST, listProductsRequest),
     takeLatest(Types.LIST_PRODUCTS_BY_CATEGORY_REQUEST, listProductsByCategoryRequest),

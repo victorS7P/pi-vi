@@ -35,7 +35,10 @@ export function PriceChartComponent ({ series }) {
             labelFormatter={formatTimestamp}
           />
 
-          <Legend verticalAlign='top' />
+          <Legend
+            verticalAlign='top'
+            height={35}
+          />
 
           {series.map(s => (
             <Line

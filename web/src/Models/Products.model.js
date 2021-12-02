@@ -60,7 +60,13 @@ export class ProductModel {
   }
 
   get lastPriceChange () {
-    const lastChange = { to: this.actualPriceData }
+    const lastChange = {
+      to: this.actualPriceData,
+      from: {
+        ...this.actualPriceData,
+        price: 0
+      }
+    }
 
     if (this.prices.length > 1) {
       lastChange.from = this.lastPriceData
@@ -71,5 +77,10 @@ export class ProductModel {
 
   get chartData () {
     return parsePriceData(this.prices)
+  }
+
+  get lastPriceFall () {
+    const lastChange = this.lastPriceChange
+    return formatCurrency(lastChange.to.price - lastChange.from.price)
   }
 }

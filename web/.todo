@@ -1,15 +1,3 @@
-Retornar os 10 produtos que tiveram a maior queda de preço de ontem para hoje:
-GET /products/sale
-reponse: {
-  list: Product[]
-}
-
-Retornar os 10 produtos de uma categoria y que tiveram a maior queda de preço de ontem para hoje:
-GET /products/sale?category=y
-reponse: {
-  list: Product[]
-}
-
 Retornar histórico do preço medio de produtos de cada categoria:
 GET /categories/prices
 response: {

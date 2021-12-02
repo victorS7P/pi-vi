@@ -17,7 +17,8 @@ export function ProductDetailsScreen () {
 
   useEffect(function () {
     dispatch(Creators.productDataRequest(sku))
-  }, [])
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [sku])
 
   return (
     <Spin spinning={selectedProductLoading}>

@@ -16,8 +16,10 @@ export const db = {
     totalProducts: datatype.number(1000),
     totalProductsToday: datatype.number(100),
     newProductsDayAvg: datatype.number(100),
-    lastProduct: random.arrayElement(products)
+    lastProduct: random.arrayElement(products),
   },
+
+  biggestFallList: random.arrayElements(products, 5),
 
   list: {
     findByPage: page => products.slice((page - 1) * 15, page * 15),

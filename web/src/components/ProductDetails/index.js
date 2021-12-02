@@ -3,6 +3,8 @@ import './ProductDetails.scss'
 import React from 'react'
 
 import { PriceChartComponent } from 'components/PriceChart'
+import { ProductsListComponent } from 'components/ProductsList'
+import { TitledBoxComponent } from 'components/TitledBox'
 
 export function ProductDetailsComponent ({ product, category, matches }) {
   const series = [
@@ -21,19 +23,18 @@ export function ProductDetailsComponent ({ product, category, matches }) {
     name: product.name,
     data: product.chartData,
     color: '#49BEAA'
-  }].concat(matches.map(p => ({
+  }].concat(matches.map((p, i) => ({
     name: p.name,
     data: p.chartData,
-    color: '#90AACB'
+    color: `#5A479A${i+5}${i+5}`
   })))
 
   return (
     <div className='product-container'>
-      <div className="info box">
-        <div className="box-title">
-          Produto
-        </div>
-
+      <TitledBoxComponent
+        className='info'
+        title='Produto'
+      >
         <span className="sku">
           {product.marketplace} / {product.sku}
         </span>
@@ -45,23 +46,16 @@ export function ProductDetailsComponent ({ product, category, matches }) {
         <span className="name">
           {product.name}
         </span>
-      </div>
+      </TitledBoxComponent>
 
-      <div className="prices box">
-        <div className="box-title">
-          Histórico de Preços
-        </div>
-
+      <TitledBoxComponent title='Histórico de Preços'>
         <PriceChartComponent series={series} />
-      </div>
+      </TitledBoxComponent>
 
-      <div className="mtaches box">
-        <div className="box-title">
-          Produtos Semelhantes
-        </div>
-
+      <TitledBoxComponent title='Produtos Semelhantes'>
+        <ProductsListComponent list={matches} loading={false} />
         <PriceChartComponent series={matchesSeries} />
-      </div>
+      </TitledBoxComponent>
     </div>
   )
 }

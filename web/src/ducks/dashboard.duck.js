@@ -8,6 +8,9 @@ export const { Types, Creators } = createActions({
   dashboardInfoRequest: [],
   dashboardInfoSuccess: ['info'],
 
+  dashboardBiggestFallListRequest: ['category'],
+  dashboardBiggestFallListSuccess: ['list'],
+
   listCategoriesRequest: [],
   listCategoriesSuccess: ['list'],
 
@@ -26,15 +29,19 @@ export const { Types, Creators } = createActions({
 /* Initial State */
 export const INITIAL_STATE = {
   info: {
-    loaded: false,
     loading: false,
+
     totalDocuments: 0, 
     totalDocumentsToday: 0,
     newDocumentsDayAvg: 0,
     totalProducts: 0,
     totalProductsToday: 0,
     newProductsDayAvg: 0,
-    lastProduct: new ProductModel()
+
+    lastProduct: new ProductModel(),
+
+    biggestFallList: [],
+    biggestFallLoading: false
   },
 
   categories: {
@@ -96,6 +103,23 @@ export const Actions = {
       loading: false,
       ...info
     },
+  }),
+
+  dashboardBiggestFallListRequest: state => ({
+    ...state,
+    info: {
+      ...state.info,
+      biggestFallLoading: true
+    }
+  }),
+  
+  dashboardBiggestFallListSuccess: (state, { list }) => ({
+    ...state,
+    info: {
+      ...state.info,
+      biggestFallList: list,
+      biggestFallLoading: false
+    }
   }),
 
   listCategoriesRequest: state => ({
@@ -179,6 +203,9 @@ export const Actions = {
 export default createReducer(INITIAL_STATE, {
   [Types.DASHBOARD_INFO_REQUEST]: Actions.dashboardInfoRequest,
   [Types.DASHBOARD_INFO_SUCCESS]: Actions.dashboardInfoSuccess,
+
+  [Types.DASHBOARD_BIGGEST_FALL_LIST_REQUEST]: Actions.dashboardBiggestFallListRequest,
+  [Types.DASHBOARD_BIGGEST_FALL_LIST_SUCCESS]: Actions.dashboardBiggestFallListSuccess,
 
   [Types.LIST_CATEGORIES_REQUEST]: Actions.listCategoriesRequest,
   [Types.LIST_CATEGORIES_SUCCESS]: Actions.listCategoriesSuccess,
