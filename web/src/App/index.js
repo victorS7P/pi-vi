@@ -7,6 +7,7 @@ import { ProductsListScreen } from 'screens/ProdustList.screen'
 import { DashboardScreen } from 'screens/Dashboard.screen';
 import { ProductDetailsScreen } from 'screens/ProductDetails.screen';
 import { BiggestFallsScreen } from 'screens/BiggestFalls.screen';
+import { CategoriesScreen } from 'screens/Categories.screen';
 
 function CustomLink({ to, Icon, label }) {
   let resolved = useResolvedPath(to);
@@ -75,6 +76,11 @@ function App() {
             <Route
               path='/quedas'
               element={<BiggestFallsScreen />}
+            />
+
+            <Route
+              path='/categorias'
+              element={<CategoriesScreen />}
             />
 
             <Route

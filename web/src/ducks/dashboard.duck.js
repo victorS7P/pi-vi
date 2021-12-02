@@ -14,6 +14,9 @@ export const { Types, Creators } = createActions({
   listCategoriesRequest: [],
   listCategoriesSuccess: ['list'],
 
+  listCategoriesPriceHistoryRequest: [],
+  listCategoriesPriceHistorySuccess: ['list'],
+
   listProductsRequest: ['page'],
   listProductsSuccess: ['list', 'page', 'totalPages'],
 
@@ -46,7 +49,8 @@ export const INITIAL_STATE = {
 
   categories: {
     list: [],
-    loading: false
+    loading: false,
+    pricesLoaded: false,
   },
   
   products: {
@@ -72,6 +76,7 @@ export const Selectors = {
 
   categoriesList: state => state.dashboard.categories.list,
   categoriesLoading: state => state.dashboard.categories.loading,
+  categoriesPricesLoaded: state => state.dashboard.categories.pricesLoaded,
 
   productsList: state => state.dashboard.products.list,
   productsLoading: state => state.dashboard.products.loading,
@@ -135,6 +140,24 @@ export const Actions = {
     categories: {
       ...state.categories,
       loading: false,
+      list
+    }
+  }),
+
+  listCategoriesPriceHistoryRequest: state => ({
+    ...state,
+    categories: {
+      ...state.categories,
+      loading: true
+    }
+  }),
+
+  listCategoriesPriceHistorySuccess: (state, { list }) => ({
+    ...state,
+    categories: {
+      ...state.categories,
+      loading: false,
+      pricesLoaded: true,
       list
     }
   }),
@@ -209,6 +232,9 @@ export default createReducer(INITIAL_STATE, {
 
   [Types.LIST_CATEGORIES_REQUEST]: Actions.listCategoriesRequest,
   [Types.LIST_CATEGORIES_SUCCESS]: Actions.listCategoriesSuccess,
+
+  [Types.LIST_CATEGORIES_PRICE_HISTORY_REQUEST]: Actions.listCategoriesPriceHistoryRequest,
+  [Types.LIST_CATEGORIES_PRICE_HISTORY_SUCCESS]: Actions.listCategoriesPriceHistorySuccess,
 
   [Types.LIST_PRODUCTS_REQUEST]: Actions.listProductsRequest,
   [Types.LIST_PRODUCTS_SUCCESS]: Actions.listProductsSuccess,

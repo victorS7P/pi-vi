@@ -1,5 +1,5 @@
 import { map } from 'lodash'
-import { commerce } from 'faker'
+import { commerce, datatype } from 'faker'
 
 import { PriceHistoryModel } from './PriceHistory.model'
 import { parsePriceData } from 'utils'
@@ -7,6 +7,7 @@ import { parsePriceData } from 'utils'
 export class CategoryModel {
   constructor (data = {}) {
     this.name = data.name
+    this.count = data.count
     this.prices = map(data.prices, p => new PriceHistoryModel(p))
   }
 
@@ -17,6 +18,7 @@ export class CategoryModel {
   static fake () {
     return new CategoryModel({
       name: commerce.productName(),
+      count: datatype.number(),
       prices: PriceHistoryModel.fakes(5)
     })
   }

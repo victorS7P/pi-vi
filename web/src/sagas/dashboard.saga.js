@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { all, takeLatest, put, call, delay } from 'redux-saga/effects'
-import { map } from 'lodash'
+import { all, takeLatest, put, call, delay, select, take } from 'redux-saga/effects'
+import { isEmpty, map } from 'lodash'
 
 import { API_URL } from 'App/App.config'
-import { Types, Creators } from 'ducks/dashboard.duck'
+import { Types, Creators, Selectors } from 'ducks/dashboard.duck'
 
 import { CategoryModel } from 'Models/Category.model'
 import { ProductModel } from 'Models/Products.model'
@@ -42,10 +42,38 @@ export function* listCategories () {
 
   // const data = yield call(axios.get, url)
   yield delay(1000)
-  const data = { list: db.categories }
+  const list = map(db.categories, c => CategoryModel.fromApi({ name: c.category, count: c.products }))
+
+  console.log('puting')
+  yield put(
+    Creators.listCategoriesSuccess(list)
+  )
+}
+
+export function* listCategoriesPriceHistoryRequest () {
+  const url = getUrl('categories?category=')
+
+  let categories = yield select(Selectors.categoriesList)
+  if (isEmpty(categories)) {
+    yield put(Creators.listCategoriesRequest())
+    yield take(Types.LIST_CATEGORIES_SUCCESS)
+  }
+
+  categories = yield select(Selectors.categoriesList)
+
+  const list = []
+  for (const category of categories) {
+    // const data = yield call(axios.get, `${url}category`)
+    yield delay(100)
+
+    const data = db.categoryPrice(category)
+    const categoryData = CategoryModel.fromApi({ ...category, prices: data.prices })
+
+    list.push(categoryData)
+  }
 
   yield put(
-    Creators.listCategoriesSuccess(data.list)
+    Creators.listCategoriesPriceHistorySuccess(list)
   )
 }
 
@@ -101,6 +129,7 @@ export default function* () {
     takeLatest(Types.DASHBOARD_INFO_REQUEST, dashboardInfoRequest),
     takeLatest(Types.DASHBOARD_BIGGEST_FALL_LIST_REQUEST, dashboardBiggestFallListRequest),
     takeLatest(Types.LIST_CATEGORIES_REQUEST, listCategories),
+    takeLatest(Types.LIST_CATEGORIES_PRICE_HISTORY_REQUEST, listCategoriesPriceHistoryRequest),
     takeLatest(Types.LIST_PRODUCTS_REQUEST, listProductsRequest),
     takeLatest(Types.LIST_PRODUCTS_BY_CATEGORY_REQUEST, listProductsByCategoryRequest),
     takeLatest(Types.PRODUCT_DATA_REQUEST, productDataRequest),

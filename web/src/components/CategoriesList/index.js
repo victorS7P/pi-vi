@@ -31,8 +31,8 @@ export function CategoriesListComponent ({ onChange }) {
       disabled={categoriesLoading}
     >
       {categoriesList.map(c => (
-        <Option value={c} key={c}>
-          {c}
+        <Option value={c.name} key={c.name}>
+          {c.name}
         </Option>
       ))}
     </Select>

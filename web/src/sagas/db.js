@@ -3,11 +3,26 @@ import { datatype, random } from 'faker'
 import { ProductModel } from 'Models/Products.model'
 
 const products = ProductModel.fakes(350)
-const categories = [...new Set(products.map(p => p.category))]
+const categories = [...new Set(products.map(p => p.category))].map(c => ({
+  category: c,
+  products: datatype.number(1000)
+}))
 
 export const db = {
   products,
   categories,
+
+  categoriesPrices: categories.map(c => ({
+    category: c,
+    prices: random.arrayElement(products).prices,
+    products: datatype.number()
+  })),
+
+  categoryPrice: category => ({
+    category,
+    prices: random.arrayElement(products).prices,
+    products: datatype.number()
+  }),
 
   info: {
     totalDocuments: datatype.number(10000),
