@@ -196,7 +196,11 @@ class MongoAPI:
         output = []
         for item in self.collection.aggregate(pipeline):
             output.append(item)
-        return output
+
+        if (len(output)):
+            return output[0]
+        else:
+            return None
         
         
         

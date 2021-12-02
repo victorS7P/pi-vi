@@ -97,11 +97,11 @@ export function* listProductsByCategoryRequest ({ page, category }) {
 }
 
 export function* productDataRequest ({ sku }) {
-  const url = `${getUrl('products')}/${sku}`
+  const url = `${getUrl('product')}?sku=${sku}`
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const product = db.product.find(sku)
+  const { data } = yield call(axios.get, url)
+  const product = ProductModel.fromApi(data)
+  console.log(product)
 
   const categoryDataUrl = `${getUrl('categories')}/${product.category}`
   

@@ -18,7 +18,8 @@ export class ProductModel {
     return new ProductModel({
       ...data,
       name: data.nome,
-      prices: data.PriceHistory
+      prices: data.PriceHistory,
+      marketplace: data.sku.substring(0, 5)
     })
   }
 
