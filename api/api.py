@@ -254,6 +254,46 @@ class MongoAPI:
             return output[0]
         else:
             return None
+
+    def match_product(self):
+        name = request.args["name"]
+
+        cursor = self.collection.aggregate([
+            {
+                '$match': {
+                    '$text': { '$search': name },
+                    'name': { '$ne': name }
+                }
+            },
+            {
+                '$sort': {
+                    'score': { '$meta': "textScore" }
+                }
+            },
+            {
+                '$project': {
+                    "_id": "$$REMOVE",
+                    "name": "$$REMOVE",
+                    "sku": "$sku"
+                }
+            },
+            {
+                '$group': {
+                    '_id': '$sku',
+                    'sku': { '$first': '$sku' }
+                }
+            },
+            {
+                '$limit': 5
+            }
+        ])
+
+        products_list = []
+        for p in cursor:
+            products_list.append(self.build_product(p['sku']))
+
+
+        return products_list
         
     def read_product_sale(self, category):
         year, month, day = str(date.today()).split("-")
@@ -354,6 +394,14 @@ def category_sale():
     category = request.args["category"]
     obj1 = MongoAPI()
     response = obj1.read_product_sale(category)
+    return Response(response=json.dumps(response),
+                    status=200,
+                    mimetype='application/json')
+
+@app.route('/products/match', methods=['GET'])
+def match_prduct():
+    obj1 = MongoAPI()
+    response = obj1.match_product()
     return Response(response=json.dumps(response),
                     status=200,
                     mimetype='application/json')
