@@ -12,8 +12,8 @@ class MongoAPI:
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s:\n%(message)s\n')
         self.client = MongoClient("mongodb://admin:admin@database:27017/")
 
-        database ='Pokemon'
-        collection = 'pokemons'
+        database ='pi-iv'
+        collection = 'products'
 
         cursor = self.client[database]
         self.collection = cursor[collection]
