@@ -17,7 +17,7 @@ export function* dashboardInfoRequest () {
   const { data } = yield call(axios.get, url)
 
   yield put(
-    Creators.dashboardInfoSuccess(data)
+    Creators.dashboardInfoSuccess(data, ProductModel.fromApi(data.lastDocument))
   )
 }
 

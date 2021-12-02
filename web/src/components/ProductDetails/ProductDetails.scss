@@ -10,10 +10,14 @@
     flex-direction: column;
 
     .sku {
+      display: inline-block;
+      width: fit-content;
+      padding: 0rem 0.25rem;
       color: #666666;
       font-style: italic;
       font-size: 0.75;
       font-weight: 500;
+      border-bottom: 0.1rem solid #66666633;
     }
   
     .category {

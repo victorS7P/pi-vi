@@ -6,7 +6,7 @@ import { CategoryModel } from 'Models/Category.model'
 /* Types */
 export const { Types, Creators } = createActions({
   dashboardInfoRequest: [],
-  dashboardInfoSuccess: ['info'],
+  dashboardInfoSuccess: ['info', 'lastProduct'],
 
   dashboardBiggestFallListRequest: ['category'],
   dashboardBiggestFallListSuccess: ['list'],
@@ -100,13 +100,14 @@ export const Actions = {
     }
   }),
 
-  dashboardInfoSuccess: (state, { info }) => ({
+  dashboardInfoSuccess: (state, { info, lastProduct }) => ({
     ...state,
     info: {
       ...state.info,
       loaded: true,
       loading: false,
-      ...info
+      ...info,
+      lastProduct
     },
   }),
 
