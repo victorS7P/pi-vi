@@ -11,10 +11,10 @@ CORS(app)
 class MongoAPI:
     def __init__(self):
         log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s:\n%(message)s\n')
-        self.client = MongoClient("mongodb+srv://Danilo:1234@Pokemon.m0ph5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+        self.client = MongoClient("mongodb://admin:admin@database:27017/")
 
-        database ='Pokemon'
-        collection = 'pokemons'
+        database ='pi-iv'
+        collection = 'products'
 
         cursor = self.client[database]
         self.collection = cursor[collection]
@@ -255,8 +255,7 @@ class MongoAPI:
         else:
             return None
         
-    def read_product_sale(self):
-        lyear,lmonth, lday = str(date.today()-timedelta(1)).split("-")
+    def read_product_sale(self, category):
         year, month, day = str(date.today()).split("-")
         
         group = {"_id": {"nome":"$name","sku":"$sku","category":"$category", "preco":"$price"
@@ -278,14 +277,16 @@ class MongoAPI:
             "sale":{"$subtract":[{"$arrayElemAt":["$_id.prices", -2]},{"$arrayElemAt":["$_id.prices", -1]}]}
         }
         
-        match={"$and":[{"PriceHistory.date.day":day}, {"PriceHistory.date.month":month}, {"PriceHistory.date.year":year}]}
+        if category == None:
+            match={"$and":[{"PriceHistory.date.day":day}, {"PriceHistory.date.month":month}, {"PriceHistory.date.year":year}]}
+        else: 
+            match={"$and":[{"PriceHistory.date.day":day}, {"PriceHistory.date.month":month}, {"PriceHistory.date.year":year}, {"_id.category":category}]}
         
         pipeline = [{"$group": group},{"$group": group1},{"$match":match},{"$group": group2}, {"$project": project},{"$sort":{"sale":-1} },{"$limit":10}]
         output = []
         for item in self.collection.aggregate(pipeline):
             output.append(item)
         return output
-        
     
 def error():
     return Response(response=json.dumps({"Error": "Please provide connection information"}),
@@ -343,7 +344,16 @@ def product():
 @app.route('/products/sale', methods=['GET'])
 def product_sale():    
     obj1 = MongoAPI()
-    response = obj1.read_product_sale()
+    response = obj1.read_product_sale(None)
+    return Response(response=json.dumps(response),
+                    status=200,
+                    mimetype='application/json')
+
+@app.route('/products/sale_category', methods=['GET'])
+def category_sale():    
+    category = request.args["category"]
+    obj1 = MongoAPI()
+    response = obj1.read_product_sale(category)
     return Response(response=json.dumps(response),
                     status=200,
                     mimetype='application/json')
