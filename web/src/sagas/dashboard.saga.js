@@ -73,26 +73,24 @@ export function* listCategoriesPriceHistoryRequest () {
 }
 
 export function* listProductsRequest ({ page }) {
-  const url = `${getUrl('products')}?page=${page}`
+  const url = `${getUrl('products_page')}?page=${page}`
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const data = { list: db.list.findByPage(page), pagesCount: db.list.pagesCount }
+  const { data } = yield call(axios.get, url)
+  const products = map(data.products, ProductModel.fromApi)
 
   yield put(
-    Creators.listProductsSuccess(data.list, page, data.pagesCount)
+    Creators.listProductsSuccess(products, page, data.lastPage)
   )
 }
 
 export function* listProductsByCategoryRequest ({ page, category }) {
-  const url = `${getUrl('products')}?page=${page}&category=${category}`
+  const url = `${getUrl('products_category_page')}?page=${page}&category=${category}`
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const data = { list: [], pagesCount: 3 }
+  const { data } = yield call(axios.get, url)
+  const products = map(data.products, ProductModel.fromApi)
 
   yield put(
-    Creators.listProductsByCategorySuccess(data.list, page, data.pagesCount, category)
+    Creators.listProductsByCategorySuccess(products, page, data.lastPage, category)
   )
 }
 
@@ -101,7 +99,6 @@ export function* productDataRequest ({ sku }) {
 
   const { data } = yield call(axios.get, url)
   const product = ProductModel.fromApi(data)
-  console.log(product)
 
   const categoryDataUrl = `${getUrl('categories')}/${product.category}`
   

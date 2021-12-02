@@ -102,74 +102,126 @@ class MongoAPI:
             break
         
         return output 
+
+    def build_product(self, sku):
+        cursor = self.collection.aggregate([
+            {
+                '$match': {
+                    'sku': sku
+                },
+            },
+
+            {
+                '$group': {
+                    '_id': {
+                        'day': '$createdAt.day',
+                        'month': '$createdAt.month',
+                        'year': '$createdAt.year',
+                        'price': '$price'
+                    },
+                    'sku':  { '$first': '$sku' },
+                    'name': { '$first': '$name' },
+                    'category': { '$first': '$category' }
+                }
+            },
+
+            {
+                '$group': {
+                    '_id': '$sku',
+                    "PriceHistory": {
+                        "$push": {
+                            "price": "$_id.price",
+                            "date": {
+                                "year":"$_id.year",
+                                "month":"$_id.month",
+                                "day":"$_id.day"
+                            }
+                        }
+                    },
+                    'sku':  { '$first': '$sku' },
+                    'nome': { '$first': '$name' },
+                    'category': { '$first': '$category' }
+                }
+            }
+        ])
+
+        return dict(list(cursor)[0])
     
     def read_products_page(self): 
-        offset = int(request.args["offset"])
-        limit = int(request.args["limit"])
-        
-        starting_id =  list(self.collection.aggregate([{"$group": {"_id": "$_id"}}, {"$sort":{"_id._id":1}}]))
-        last_id = starting_id[offset]["_id"]
-        
-        group = {"_id": {"id":"$_id","nome":"$name","sku":"$sku","category":"$category", "preco":"$price"
-                ,"day":"$createdAt.day"
-                ,"month":"$createdAt.month"
-                ,"year":"$createdAt.year"}} 
-        
-        group1= {"_id": {"id":"$_id.id","name":"$_id.nome","sku":"$_id.sku","category":"$_id.category"},
-                 "PriceHistory":{"$push":{"price":"$_id.preco","date":{"year":"$_id.year","month":"$_id.month","day":"$_id.day"}}}} 
-        
-        project = {  
-            "_id":0,
-            "nome":"$_id.name",
-            "sku": "$_id.sku",
-            "category": "$_id.category",
-            "PriceHistory":"$PriceHistory"
-        }
-        
-        match = {"_id":{"$gte": last_id}}
+        page = int(request.args["page"])
 
-        output = list()
-        pipeline = [{"$match":match},{"$group": group},{"$group": group1},{"$sort":{"_id.id":1}},{"$project":project},{"$limit":limit}]
-        for item in self.collection.aggregate(pipeline):
-            output.append({"product":item})
-        next_page = offset + limit
-        prev_url = offset - limit
-        return jsonify({"products": output, "prev_page":prev_url, "next_page":next_page}) 
+        limit = 20
+        offset = ((page - 1) * limit)
+        
+        cursor = self.collection.aggregate([
+            {
+                "$facet": {
+                    "edges": [
+                        { "$skip": offset },
+                        { "$limit": limit }
+                    ],
+
+                    "pageInfo": [
+                        {
+                            "$group": {
+                                "_id": "sku",
+                                "count": { "$sum": 1 }
+                            }
+                        }
+                    ]
+                }
+            }
+        ])
+
+        total = 0
+        products = []
+        for document in cursor:
+            total = list(document['pageInfo'])[0]['count']
+            for p in document["edges"]:
+                products.append(self.build_product(p['sku']))
+
+        return jsonify({"products": products, "lastPage": (total // limit) + 1}) 
     
     def read_category_page(self):
-        offset = int(request.args["offset"])
-        limit = int(request.args["limit"])
+        page = int(request.args["page"])
         category = request.args["category"]
+
+        limit = 20
+        offset = ((page - 1) * limit)
         
-        starting_id =  list(self.collection.aggregate([{"$group": {"_id": "$_id"}}, {"$sort":{"_id._id":1}}]))
-        last_id = starting_id[offset]["_id"]
-        
-        group = {"_id": {"id":"$_id","nome":"$name","sku":"$sku","category":"$category", "preco":"$price"
-                ,"day":"$createdAt.day"
-                ,"month":"$createdAt.month"
-                ,"year":"$createdAt.year"}} 
-        
-        group1= {"_id": {"id":"$_id.id","name":"$_id.nome","sku":"$_id.sku","category":"$_id.category"},
-                 "PriceHistory":{"$push":{"price":"$_id.preco","date":{"year":"$_id.year","month":"$_id.month","day":"$_id.day"}}}} 
-        
-        project = {  
-            "_id":0,
-            "nome":"$_id.name",
-            "sku": "$_id.sku",
-            "category": "$_id.category",
-            "PriceHistory":"$PriceHistory"
-        }
-        
-        match = {"_id":{"$gte": last_id}}
-        match2 = {"_id.category":category}
-        
-        output = list()
-        pipeline = [{"$match":match},{"$group": group},{"$group": group1},{"$match":match2},{"$sort":{"_id.id":1}},{"$project":project},{"$limit":limit}]
-        for item in self.collection.aggregate(pipeline):
-            output.append({"product":item})
-        next_page = offset + limit
-        prev_url = offset - limit
-        return jsonify({"products": output, "prev_page":prev_url, "next_page":next_page}) 
+        cursor = self.collection.aggregate([
+            {
+                "$match": {
+                    'category': category
+                }
+            },
+            {
+                "$facet": {
+                    "edges": [
+                        { "$skip": offset },
+                        { "$limit": limit }
+                    ],
+
+                    "pageInfo": [
+                        {
+                            "$group": {
+                                "_id": "sku",
+                                "count": { "$sum": 1 }
+                            }
+                        }
+                    ]
+                }
+            }
+        ])
+
+        total = 0
+        products = []
+        for document in cursor:
+            total = list(document['pageInfo'])[0]['count']
+            for p in document["edges"]:
+                products.append(self.build_product(p['sku']))
+
+        return jsonify({"products": products, "lastPage": (total // limit) + 1}) 
     
     def read_product(self):
         sku = request.args["sku"]
