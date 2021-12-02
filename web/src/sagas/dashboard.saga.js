@@ -37,9 +37,8 @@ export function * dashboardBiggestFallListRequest ({ category }) {
 export function* listCategories () {
   const url = getUrl('categories')
 
-  // const data = yield call(axios.get, url)
-  yield delay(1000)
-  const list = map(db.categories, c => CategoryModel.fromApi({ name: c.category, count: c.products }))
+  const { data } = yield call(axios.get, url)
+  const list = map(data, c => CategoryModel.fromApi({ name: c.category, count: c.products }))
 
   yield put(
     Creators.listCategoriesSuccess(list)

@@ -26,9 +26,9 @@ class MongoAPI:
     
     def read_categories(self):
         log.info('Reading Categories')
-        group = {"_id": "$category"} 
+        group = {"_id": "$category", "products": { "$sum": 1 }} 
         pipeline = [ {"$group": group}]
-        output = [item["_id"] for item in self.collection.aggregate(pipeline)]
+        output = [{"category": item["_id"], "products": item["products"]} for item in self.collection.aggregate(pipeline)]
         return output
     
     def read_info(self):
