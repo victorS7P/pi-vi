@@ -109,8 +109,6 @@ export function* productDataRequest ({ sku }) {
   const matchUrl = `${getUrl('products')}/match?name=${product.name}`
   const { data: matches } = yield call(axios.get, matchUrl)
 
-  console.log(matches)
-
   yield put(
     Creators.productDataSuccess(product, category, map(matches, ProductModel.fromApi))
   )
