@@ -1,11 +1,13 @@
 import './App.scss'
-import { BrowserRouter, Routes, Navigate, Route, Link, useMatch, useResolvedPath } from 'react-router-dom'
+import { DatabaseOutlined, HomeOutlined, TagsOutlined, FallOutlined } from '@ant-design/icons'
 
-import { DatabaseOutlined, HomeOutlined, TagsOutlined } from '@ant-design/icons'
+import { BrowserRouter, Routes, Navigate, Route, Link, useMatch, useResolvedPath } from 'react-router-dom'
 
 import { ProductsListScreen } from 'screens/ProdustList.screen'
 import { DashboardScreen } from 'screens/Dashboard.screen';
 import { ProductDetailsScreen } from 'screens/ProductDetails.screen';
+import { BiggestFallsScreen } from 'screens/BiggestFalls.screen';
+import { CategoriesScreen } from 'screens/Categories.screen';
 
 function CustomLink({ to, Icon, label }) {
   let resolved = useResolvedPath(to);
@@ -41,8 +43,9 @@ function App() {
 
           <div id="links">
             <CustomLink to='/home' Icon={HomeOutlined} label='Dashboard' />
-            <CustomLink to='/produtos' Icon={DatabaseOutlined} label='Produtos' />
+            <CustomLink to='/quedas' Icon={FallOutlined} label='Maiores Quedas do Dia' />
             <CustomLink to='/categorias' Icon={TagsOutlined} label='Categorias' />
+            <CustomLink to='/produtos' Icon={DatabaseOutlined} label='Produtos' />
           </div>
         </div>
 
@@ -68,6 +71,16 @@ function App() {
             <Route
               path='/produtos/:sku'
               element={<ProductDetailsScreen />}
+            />
+
+            <Route
+              path='/quedas'
+              element={<BiggestFallsScreen />}
+            />
+
+            <Route
+              path='/categorias'
+              element={<CategoriesScreen />}
             />
 
             <Route

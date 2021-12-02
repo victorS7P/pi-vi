@@ -8,6 +8,9 @@
   flex-direction: column;
   padding-left: 17rem;
 
+  user-select: none !important;
+  cursor: default !important;
+
   header {
     padding: 1rem;
     width: 100%;
@@ -36,7 +39,7 @@
   }
 
   #sidebar {
-    position: absolute;
+    position: fixed;
     left: 0;
     min-height: 100vh;
     width: 17rem;
@@ -51,7 +54,7 @@
       height: 4rem;
       display: flex;
       align-items: center;
-      padding-left: 1.25rem;
+      padding-left: 0.75rem;
 
       background-color: red;
       background-image: linear-gradient(45deg, #5A479A, #49DCB1);
@@ -68,9 +71,9 @@
     #links {
       .link-option {
         display: flex;
-        padding: 1rem 1.5rem;
+        padding: 1rem;
         align-items: center;
-        font-size: 1.125rem;
+        font-size: 1rem;
         font-weight: 500;
         color: #636e72;
 
@@ -94,6 +97,6 @@
 
   #container {
     margin-top: 1rem;
-    padding: 0rem 1.5rem;
+    padding: 0rem 1.5rem 2rem;
   }
 }

@@ -1,15 +1,8 @@
 import { map } from 'lodash'
-import { lorem, commerce, company } from 'faker'
+import { commerce, company, datatype } from 'faker'
 
 import { PriceHistoryModel } from './PriceHistory.model'
-
-const dateCompare = ({ date }, b) => (
-  new Date(b.date.year, b.date.month, b.date.day) - new Date(date.year, date.month, date.day)
-)
-
-const formatCurrency = value => (
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
-)
+import { dateCompare, formatCurrency, parsePriceData } from 'utils'
 
 export class ProductModel {
   constructor (data = {}) {
@@ -28,7 +21,7 @@ export class ProductModel {
   static fake () {
     return new ProductModel({
       name: commerce.productName(),
-      sku: lorem.word().toUpperCase(),
+      sku: datatype.uuid(),
       marketplace: company.companyName(),
       category: commerce.department(),
       prices: PriceHistoryModel.fakes(5)
@@ -67,12 +60,27 @@ export class ProductModel {
   }
 
   get lastPriceChange () {
-    const lastChange = { to: this.actualPriceData }
+    const lastChange = {
+      to: this.actualPriceData,
+      from: {
+        ...this.actualPriceData,
+        price: 0
+      }
+    }
 
     if (this.prices.length > 1) {
       lastChange.from = this.lastPriceData
     }
 
     return lastChange
+  }
+
+  get chartData () {
+    return parsePriceData(this.prices)
+  }
+
+  get lastPriceFall () {
+    const lastChange = this.lastPriceChange
+    return formatCurrency(lastChange.to.price - lastChange.from.price)
   }
 }

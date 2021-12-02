@@ -1,13 +1,21 @@
-import { ProductModel } from 'Models/Products.model'
 import { createActions, createReducer } from 'reduxsauce'
+
+import { ProductModel } from 'Models/Products.model'
+import { CategoryModel } from 'Models/Category.model'
 
 /* Types */
 export const { Types, Creators } = createActions({
   dashboardInfoRequest: [],
   dashboardInfoSuccess: ['info'],
 
+  dashboardBiggestFallListRequest: ['category'],
+  dashboardBiggestFallListSuccess: ['list'],
+
   listCategoriesRequest: [],
   listCategoriesSuccess: ['list'],
+
+  listCategoriesPriceHistoryRequest: [],
+  listCategoriesPriceHistorySuccess: ['list'],
 
   listProductsRequest: ['page'],
   listProductsSuccess: ['list', 'page', 'totalPages'],
@@ -16,7 +24,7 @@ export const { Types, Creators } = createActions({
   listProductsByCategorySuccess: ['list', 'page', 'totalPages', 'category'],
 
   productDataRequest: ['sku'],
-  productDataSuccess: ['product']
+  productDataSuccess: ['product', 'category', 'matches']
 }, {
   prefix: 'DASHBOARD_'
 })
@@ -24,20 +32,25 @@ export const { Types, Creators } = createActions({
 /* Initial State */
 export const INITIAL_STATE = {
   info: {
-    loaded: false,
     loading: false,
+
     totalDocuments: 0, 
     totalDocumentsToday: 0,
     newDocumentsDayAvg: 0,
     totalProducts: 0,
     totalProductsToday: 0,
     newProductsDayAvg: 0,
-    lastProduct: new ProductModel()
+
+    lastProduct: new ProductModel(),
+
+    biggestFallList: [],
+    biggestFallLoading: false
   },
 
   categories: {
     list: [],
-    loading: false
+    loading: false,
+    pricesLoaded: false,
   },
   
   products: {
@@ -51,7 +64,9 @@ export const INITIAL_STATE = {
 
   selectedProduct: {
     loading: false,
-    product: new ProductModel()
+    product: new ProductModel(),
+    category: new CategoryModel(),
+    matches: []
   }
 }
 
@@ -61,6 +76,7 @@ export const Selectors = {
 
   categoriesList: state => state.dashboard.categories.list,
   categoriesLoading: state => state.dashboard.categories.loading,
+  categoriesPricesLoaded: state => state.dashboard.categories.pricesLoaded,
 
   productsList: state => state.dashboard.products.list,
   productsLoading: state => state.dashboard.products.loading,
@@ -69,7 +85,9 @@ export const Selectors = {
   productsTotalPages: state => state.dashboard.products.totalPages,
   
   selectedProduct: state => state.dashboard.selectedProduct.product,
-  selectedProductLoading: state => state.dashboard.selectedProduct.loading
+  selectedProductLoading: state => state.dashboard.selectedProduct.loading,
+  selectedProductCategory: state => state.dashboard.selectedProduct.category,
+  selectedProductMatches: state => state.dashboard.selectedProduct.matches,
 }
 
 /* Action Creators */
@@ -92,6 +110,23 @@ export const Actions = {
     },
   }),
 
+  dashboardBiggestFallListRequest: state => ({
+    ...state,
+    info: {
+      ...state.info,
+      biggestFallLoading: true
+    }
+  }),
+  
+  dashboardBiggestFallListSuccess: (state, { list }) => ({
+    ...state,
+    info: {
+      ...state.info,
+      biggestFallList: list,
+      biggestFallLoading: false
+    }
+  }),
+
   listCategoriesRequest: state => ({
     ...state,
     categories: {
@@ -105,6 +140,24 @@ export const Actions = {
     categories: {
       ...state.categories,
       loading: false,
+      list
+    }
+  }),
+
+  listCategoriesPriceHistoryRequest: state => ({
+    ...state,
+    categories: {
+      ...state.categories,
+      loading: true
+    }
+  }),
+
+  listCategoriesPriceHistorySuccess: (state, { list }) => ({
+    ...state,
+    categories: {
+      ...state.categories,
+      loading: false,
+      pricesLoaded: true,
       list
     }
   }),
@@ -157,11 +210,13 @@ export const Actions = {
     }
   }),
 
-  productDataSuccess: (state, { product }) => ({
+  productDataSuccess: (state, { product, category, matches }) => ({
     ...state,
     selectedProduct: {
       ...state.selectedProduct,
       product,
+      category,
+      matches,
       loading: false,
     }
   })
@@ -172,8 +227,14 @@ export default createReducer(INITIAL_STATE, {
   [Types.DASHBOARD_INFO_REQUEST]: Actions.dashboardInfoRequest,
   [Types.DASHBOARD_INFO_SUCCESS]: Actions.dashboardInfoSuccess,
 
+  [Types.DASHBOARD_BIGGEST_FALL_LIST_REQUEST]: Actions.dashboardBiggestFallListRequest,
+  [Types.DASHBOARD_BIGGEST_FALL_LIST_SUCCESS]: Actions.dashboardBiggestFallListSuccess,
+
   [Types.LIST_CATEGORIES_REQUEST]: Actions.listCategoriesRequest,
   [Types.LIST_CATEGORIES_SUCCESS]: Actions.listCategoriesSuccess,
+
+  [Types.LIST_CATEGORIES_PRICE_HISTORY_REQUEST]: Actions.listCategoriesPriceHistoryRequest,
+  [Types.LIST_CATEGORIES_PRICE_HISTORY_SUCCESS]: Actions.listCategoriesPriceHistorySuccess,
 
   [Types.LIST_PRODUCTS_REQUEST]: Actions.listProductsRequest,
   [Types.LIST_PRODUCTS_SUCCESS]: Actions.listProductsSuccess,

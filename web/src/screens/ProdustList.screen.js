@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { Creators, Selectors } from 'ducks/dashboard.duck'
-import { ProductModel } from "Models/Products.model"
 
 import { CategoriesListComponent } from 'components/CategoriesList'
 import { ProductsListComponent } from "components/ProductsList"
 
-export function ProductsListScreen ({}) {
+export function ProductsListScreen () {
   const dispatch = useDispatch()
 
   const productsList = useSelector(Selectors.productsList)
@@ -21,7 +20,7 @@ export function ProductsListScreen ({}) {
     if (isEmpty(productsList) && !productsLoading) {
       dispatch(Creators.listProductsRequest(currentPage))
     }
-  }, [])
+  }, [dispatch, productsList, productsLoading, currentPage])
 
   function handleChangePage (page) {
     if (page !== currentPage) {
@@ -55,6 +54,7 @@ export function ProductsListScreen ({}) {
         currentPage={currentPage}
         loading={productsLoading}
         onChangePage={handleChangePage}
+        pagination={true}
       />
     </>
   )

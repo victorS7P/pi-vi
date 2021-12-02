@@ -7,17 +7,22 @@ services:
     ports:
       - 27017:27017
     environment:
+      TZ: America/Sao_Paulo
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
 
   splash:
     image: scrapinghub/splash
     container_name: scraping_splash
+    environment:
+      TZ: America/Sao_Paulo
     ports:
       - 8050:8050
 
   scrappers:
     container_name: pi-iv-scrappers
+    environment:
+      TZ: America/Sao_Paulo
     build:
       context: scrappers
       dockerfile: Dockerfile.scrappers
@@ -33,6 +38,7 @@ services:
       context: api
       dockerfile: Dockerfile.api
     environment:
+      TZ: America/Sao_Paulo
       DB_URL: mongodb://admin:admin@database:27017/
       DB_NAME: 'pi-iv'
     depends_on:
@@ -43,5 +49,7 @@ services:
     build:
       context: web
       dockerfile: Dockerfile.web
+    environment:
+      TZ: America/Sao_Paulo
     ports:
       - 8080:8080

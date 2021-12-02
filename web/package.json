@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.1.10",
     "antd": "^4.17.2",
     "axios": "^0.24.0",
+    "date-fns": "^2.27.0",
     "faker": "^5.5.3",
     "lodash": "^4.17.21",
     "node-sass": "4.14.1",
